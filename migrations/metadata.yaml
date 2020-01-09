@@ -1,0 +1,176 @@
+allowlist: []
+functions: []
+query_collections: []
+remote_schemas: []
+tables:
+- array_relationships: []
+  computed_fields: []
+  configuration:
+    custom_column_names: {}
+    custom_root_fields:
+      delete: null
+      insert: null
+      select: null
+      select_aggregate: null
+      select_by_pk: null
+      update: null
+  delete_permissions:
+  - comment: null
+    permission:
+      filter:
+        userId:
+          _eq: X-Hasura-User-Id
+    role: user
+  event_triggers: []
+  insert_permissions:
+  - comment: null
+    permission:
+      check:
+        userId:
+          _eq: X-Hasura-User-Id
+      columns:
+      - attributes
+      - completed
+      - graphs
+      set:
+        userId: x-hasura-user-id
+    role: user
+  is_enum: false
+  object_relationships: []
+  select_permissions:
+  - comment: null
+    permission:
+      allow_aggregations: true
+      columns:
+      - completed
+      - id
+      - userId
+      - attributes
+      - graphs
+      - createdAt
+      - updatedAt
+      computed_fields: []
+      filter:
+        userId:
+          _eq: X-Hasura-User-Id
+    role: user
+  table: annotations
+  update_permissions:
+  - comment: null
+    permission:
+      columns:
+      - attributes
+      - completed
+      - graphs
+      - id
+      filter:
+        userId:
+          _eq: X-Hasura-User-Id
+      set:
+        userId: x-hasura-user-id
+    role: user
+- array_relationships: []
+  computed_fields: []
+  configuration:
+    custom_column_names: {}
+    custom_root_fields:
+      delete: null
+      insert: null
+      select: null
+      select_aggregate: null
+      select_by_pk: null
+      update: null
+  delete_permissions: []
+  event_triggers: []
+  insert_permissions: []
+  is_enum: false
+  object_relationships:
+  - comment: null
+    name: user
+    using:
+      manual_configuration:
+        column_mapping:
+          id: id
+        remote_table: users
+  select_permissions:
+  - comment: null
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - last_seen
+      computed_fields: []
+      filter: {}
+    role: user
+  table: online_users
+  update_permissions: []
+- array_relationships: []
+  computed_fields: []
+  configuration:
+    custom_column_names: {}
+    custom_root_fields:
+      delete: null
+      insert: null
+      select: null
+      select_aggregate: null
+      select_by_pk: null
+      update: null
+  delete_permissions: []
+  event_triggers: []
+  insert_permissions: []
+  is_enum: false
+  object_relationships:
+  - comment: null
+    name: user
+    using:
+      foreign_key_constraint_on: userId
+  - comment: null
+    name: userByAssignedid
+    using:
+      foreign_key_constraint_on: assignedId
+  select_permissions: []
+  table: tasks
+  update_permissions: []
+- array_relationships: []
+  computed_fields: []
+  configuration:
+    custom_column_names: {}
+    custom_root_fields:
+      delete: null
+      insert: null
+      select: null
+      select_aggregate: null
+      select_by_pk: null
+      update: null
+  delete_permissions: []
+  event_triggers: []
+  insert_permissions: []
+  is_enum: false
+  object_relationships: []
+  select_permissions:
+  - comment: null
+    permission:
+      allow_aggregations: false
+      columns:
+      - id
+      - username
+      computed_fields: []
+      filter: {}
+    role: user
+  table: users
+  update_permissions:
+  - comment: null
+    permission:
+      columns:
+      - email
+      - first
+      - last
+      - last_seen
+      - password
+      - username
+      filter:
+        id:
+          _eq: X-Hasura-User-Id
+      set: {}
+    role: user
+version: 2
