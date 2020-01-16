@@ -1,0 +1,1 @@
+(context.authorization || { roles: ['user']}).role

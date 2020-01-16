@@ -7,10 +7,10 @@ import TodoFilters from "./TodoFilters";
 
 const GET_MY_TODOS = gql`
 query getMyTodos {
-  tasks(order_by: { createdAt: desc }) {
+  tasks(order_by: { created_at: desc }) {
     id
-    taskDescription
-    createdAt
+    task_description
+    created_at
     completed
 }
 }`;
@@ -62,7 +62,10 @@ const TodoPrivateList = props => {
 };
 
 const TodoPrivateListQuery = () => {
-  const { loading, error, data } = useQuery(GET_MY_TODOS);
+
+  const { loading, error, data, client} = useQuery(GET_MY_TODOS);
+
+  console.log(client)
 
   if (loading) {
     return <div>Loading...</div>;

@@ -2,6 +2,7 @@ import React from "react";
 
 import TodoInput from "./TodoInput";
 import TodoPublicList from "./TodoPublicList";
+import Annotation from "./Annotation";
 
 const TodoPublicWrapper = () => {
   return (
@@ -10,6 +11,8 @@ const TodoPublicWrapper = () => {
 
       <TodoInput isPublic />
       <TodoPublicList />
+      <Annotation />
+
     </div>
   );
 };
