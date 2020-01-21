@@ -4,14 +4,18 @@ import { useMutation } from "@apollo/react-hooks"
 import {GET_MY_TODOS} from './TodoPrivateList';
 
 const ADD_TODO = gql `
-  mutation ($todo: String!, $isPublic: Boolean!) {
-    insert_todos(objects: {title: $todo, is_public: $isPublic}) {
-      affected_rows
+  mutation insertTask($todo: String!) {
+    insert_tasks(objects: [{
+      completed: false,
+      task_type: "sentence_annotation",
+      task_description: $todo,
+    }])
+    {
       returning {
         id
-        title
+        task_description
         created_at
-        is_completed
+        completed
       }
     }
   }
@@ -39,16 +43,17 @@ const TodoInput = ({ isPublic = false }) => {
   const resetInput = () => {
     setTodoInput('');
   };
-  const [addTodo] = useMutation(ADD_TODO, {
+  const [addTodo, { loading: mutationLoading, error: mutationError}] = useMutation(ADD_TODO, {
     update: updateCache,
     onCompleted: resetInput
   });
   return (
+    <>
     <form
       className="formInput"
       onSubmit={e => {
         e.preventDefault();
-        addTodo({variables: {todo: todoInput, isPublic }});
+        addTodo({variables: {todo: todoInput}});
       }}
     >
       <input 
@@ -60,6 +65,9 @@ const TodoInput = ({ isPublic = false }) => {
       />
       <i className="inputMarker fa fa-angle-right" />
     </form>
+    {mutationLoading && <p>Loading...</p>}
+    {mutationError && console.log(mutationError)}
+    </>
   );
 };
 
