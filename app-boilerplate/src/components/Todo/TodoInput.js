@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import gql from 'graphql-tag';
 import { useMutation } from "@apollo/react-hooks"
 import {GET_MY_TODOS} from './TodoPrivateList';
+import AnnotationTypesDropDown from './AnnotationTypesDropDown'
 
 const ADD_TODO = gql `
   mutation insertTask($todo: String!) {
@@ -64,6 +65,7 @@ const TodoInput = ({ isPublic = false }) => {
         ref={n => (input = n)}
       />
       <i className="inputMarker fa fa-angle-right" />
+      <AnnotationTypesDropDown />
     </form>
     {mutationLoading && <p>Loading...</p>}
     {mutationError && console.log(mutationError)}
