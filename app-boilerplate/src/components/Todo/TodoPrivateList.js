@@ -17,14 +17,19 @@ query getMyTodos {
 
 const TodoPrivateList = props => {
   const [state, setState] = useState({
-    filter: "all",
+    filterStatus: "all",
+    filterOwner: "all",
     clearInProgress: false,
   });
 
-  const filterResults = filter => {
+  const filterResults = (filterStatus, filterOwner) => {
+    console.log("filter status", filterStatus);
+    console.log("filter owner", filterOwner);    
+
     setState({
       ...state,
-      filter: filter
+      filterStatus: filterStatus,
+      filterOwner: filterOwner
     });
   };
 
@@ -33,11 +38,16 @@ const TodoPrivateList = props => {
   const {todos} = props;
   let filteredTodos = todos;
   
-  if (state.filter === "active") {
+
+  if (state.filterStatus === "active") {
     filteredTodos = todos.filter(todo => todo.completed !== true);
-  } else if (state.filter === "completed") {
+  } else if (state.filterStatus === "completed") {
     filteredTodos = todos.filter(todo => todo.completed === true);
   }
+
+  // if(state.filterOwner === "mine") {
+  //   filteredTodos = filteredTodos.filter(todo => )
+  // }
 
   const todoList = [];
   filteredTodos.forEach((todo, index) => {
@@ -52,7 +62,10 @@ const TodoPrivateList = props => {
 
       <TodoFilters
         todos={filteredTodos}
-        currentFilter={state.filter}
+        currentFilters={{
+          filterStatus: state.filterStatus, 
+          filterOwner: state.filterOwner
+        }}
         filterResultsFn={filterResults}
         clearCompletedFn={clearCompleted}
         clearInProgress={state.clearInProgress}

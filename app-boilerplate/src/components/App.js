@@ -36,17 +36,12 @@ const App = ({ idToken }) => {
       <div>
         <Header logoutHandler={logout} />
         <div className="row container-fluid p-left-right-0 m-left-right-0">
-          <div className="row col-md-9 p-left-right-0 m-left-right-0">
-            <div className="col-md-6 sliderMenu p-30">
+          <div className="row col-md-12 p-left-right-0 m-left-right-0">
+            <div className="col-md-4 sliderMenu p-30">
               <TodoPrivateWrapper />
             </div>
-            <div className="col-md-6 sliderMenu p-30 bg-gray border-right">
+            <div className="col-md-8 sliderMenu p-30 bg-gray border-right">
               <TodoPublicWrapper />
-            </div>
-          </div>
-          <div className="col-md-3 p-left-right-0">
-            <div className="col-md-12 sliderMenu p-30 bg-gray">
-              <OnlineUsersWrapper />
             </div>
           </div>
         </div>
@@ -54,5 +49,11 @@ const App = ({ idToken }) => {
     </ApolloProvider>
   );
 };
+
+{/* <div className="col-md-3 p-left-right-0">
+<div className="col-md-12 sliderMenu p-30 bg-gray">
+  <OnlineUsersWrapper />
+</div>
+</div> */}
 
 export default App;
