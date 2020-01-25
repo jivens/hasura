@@ -3,7 +3,7 @@ import React from "react";
 import Header from "./Header";
 import TodoPrivateWrapper from "./Todo/TodoPrivateWrapper";
 import TodoPublicWrapper from "./Todo/TodoPublicWrapper";
-import OnlineUsersWrapper from "./OnlineUsers/OnlineUsersWrapper";
+//import OnlineUsersWrapper from "./OnlineUsers/OnlineUsersWrapper";
 
 import ApolloClient from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
@@ -50,10 +50,10 @@ const App = ({ idToken }) => {
   );
 };
 
-{/* <div className="col-md-3 p-left-right-0">
+/* <div className="col-md-3 p-left-right-0">
 <div className="col-md-12 sliderMenu p-30 bg-gray">
   <OnlineUsersWrapper />
 </div>
-</div> */}
+</div> */
 
 export default App;

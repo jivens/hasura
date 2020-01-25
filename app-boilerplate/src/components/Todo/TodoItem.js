@@ -56,7 +56,7 @@ const TodoItem = ({ index, todo }) => {
       </div>
 
       <div className={"labelContent" + (todo.completed ? " completed" : "")}>
-        <div>{todo.task_description}</div>
+        <div onClick={()=>{alert(todo.task_description)}}>{todo.task_description}</div>
       </div>
 
       <button className="closeBtn" onClick={removeTodo}>

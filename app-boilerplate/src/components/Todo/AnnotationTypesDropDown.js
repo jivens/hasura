@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { gql } from 'apollo-boost';
 import {useQuery} from '@apollo/react-hooks';
 
@@ -22,7 +22,7 @@ function displayAnnotationTypes(data){
 
 function AnnotationTypesDropDown() {
     const annotationTypes = useQuery(GET_ANNOTATION_TYPES_QUERY);
-    console.log(annotationTypes)
+    //console.log(annotationTypes)
     return(
         <div className="field">
             <label>Annotation Type:</label>

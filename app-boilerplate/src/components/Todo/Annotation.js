@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { useTable, usePagination } from 'react-table'
 
-import makeData from './makeData'
+//import makeData from './makeData'
 import new_sentence_data from './makeAnnotationData'
 
 

@@ -2,6 +2,8 @@ import React, { useState, Fragment } from "react";
 import {useQuery} from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 
+import { useAuth0 } from "../Auth/react-auth0-spa";
+
 import TodoItem from "./TodoItem";
 import TodoFilters from "./TodoFilters";
 
@@ -10,8 +12,10 @@ query getMyTodos {
   tasks(order_by: { created_at: desc }) {
     id
     task_description
+    task_type
     created_at
     completed
+    assigner_id
 }
 }`;
 
@@ -21,6 +25,10 @@ const TodoPrivateList = props => {
     filterOwner: "all",
     clearInProgress: false,
   });
+
+  const { loading, error, user} = useAuth0();
+  if (loading) return <div>Loading</div>;
+  if (error) return <div>Auth Error</div>; 
 
   const filterResults = (filterStatus, filterOwner) => {
     console.log("filter status", filterStatus);
@@ -45,9 +53,11 @@ const TodoPrivateList = props => {
     filteredTodos = todos.filter(todo => todo.completed === true);
   }
 
-  // if(state.filterOwner === "mine") {
-  //   filteredTodos = filteredTodos.filter(todo => )
-  // }
+  if(state.filterOwner === "mine" || state.filterOwner === "assigned") {
+    filteredTodos = filteredTodos.filter(todo => todo.assigner_id === user.sub)
+  } else if (state.filterOwner === "others") {
+    filteredTodos = filteredTodos.filter(todo => todo.assigner_id !== user.sub)
+  }
 
   const todoList = [];
   filteredTodos.forEach((todo, index) => {
@@ -76,9 +86,10 @@ const TodoPrivateList = props => {
 
 const TodoPrivateListQuery = () => {
 
-  const { loading, error, data, client} = useQuery(GET_MY_TODOS);
-
-  console.log(client)
+  const { loading, error, data} = useQuery(GET_MY_TODOS);
+  
+  //const { loading, error, data, client} = useQuery(GET_MY_TODOS);
+  //console.log(client)
 
   if (loading) {
     return <div>Loading...</div>;

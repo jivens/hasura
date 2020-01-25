@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState } from "react";
-import { FragmentsOnCompositeTypesRule } from "graphql";
+//import { FragmentsOnCompositeTypesRule } from "graphql";
 import { Button } from "react-bootstrap";
 
 const TodoFilters = ({
@@ -22,13 +22,13 @@ const TodoFilters = ({
   };
 
   // The clear completed button if these are personal todos
-  const clearCompletedButton = (
+/*   const clearCompletedButton = (
     <button onClick={clearCompletedFn} className="clearComp">
       Clear completed
     </button>
-  );
+  ); */
 
-  const activeTodos = todos.filter(todo => todo.is_completed !== true);
+  const activeTodos = todos.filter(todo => todo.completed !== true);
 
   let itemCount = todos.length;
   if (currentFilters.filterStatus === "active") {
@@ -68,7 +68,6 @@ const TodoFilters = ({
         </li>
       </ul>
 
-
       <ul>
         <li onClick={() => {    
           setFilterOwner("all")
@@ -93,10 +92,12 @@ const TodoFilters = ({
         }}>
           <a className={filterOwner === "assigned" ? "selected" : ""}>Assigned</a>
         </li>
+      </ul>
 
+      <ul>
         <li>
           <Button
-            id="qsFilter"
+            id="qsOuter"
             variant="primary"
             className="btn-margin"
             onClick={filterResultsHandler(filterStatus, filterOwner)}
@@ -105,14 +106,6 @@ const TodoFilters = ({
           </Button>
         </li>
       </ul>
-      <button
-        id="qsOuter"
-        variant="primary"
-        className="btn-margin"
-        onClick={filterResultsHandler(filterStatus, filterOwner)}
-      >
-        Filter
-      </button>
 
       {/*clearCompletedButton*/}
     </div>
