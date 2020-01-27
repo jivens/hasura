@@ -1,44 +1,31 @@
 import React from 'react'
-import styled from 'styled-components'
 import { useTable, usePagination } from 'react-table'
+import gql from 'graphql-tag';
 
 //import makeData from './makeData'
+import TableStyles from '../../styles/table-styles'
 import new_sentence_data from './makeAnnotationData'
+import { Button } from 'react-bootstrap'
+import { useMutation } from "@apollo/react-hooks"
 
 
-const Styles = styled.div`
-  padding: 1rem;
-  table {
-    border-spacing: 0;
-    border: 1px solid black;
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
+const UPDATE_ANNOTATION = gql `
+mutation updateAnnotations($anno: jsonb, $id: Int!) {
+  update_annotations(
+    where: {
+    	id: {_eq: $id}
+    },
+    _set: {
+  	  completed: "unconfirmed", 
+    	annotation: $anno
     }
-    th,
-    td {
-      margin: 0;
-      padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
-      :last-child {
-        border-right: 0;
-      }
-      input {
-        font-size: 1rem;
-        padding: 0;
-        margin: 0;
-        border: 0;
-      }
+  ) {
+    returning {
+      id
     }
   }
-  .pagination {
-    padding: 0.5rem;
-  }
-`
+}
+`;
 
 // Create an editable cell renderer
 const EditableCell = ({
@@ -112,12 +99,13 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
   // Render the UI for your table
   return (
     <>
+    <div className="tableWrap">
       <table {...getTableProps()}>
         <thead>
           {headerGroups.map(headerGroup => (
             <tr {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => (
-                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+                <th width={column.width} {...column.getHeaderProps()} >{column.render('Header')}</th>
               ))}
             </tr>
           ))}
@@ -135,6 +123,7 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
           })}
         </tbody>
       </table>
+      </div>
       <div className="pagination">
         <button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
           {'<<'}
@@ -179,6 +168,15 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
           ))}
         </select>
       </div>
+      <div className="saveAnnotation">
+        <Button
+          onClick={() => {
+            //updateSentenceData()
+          }}
+        >
+          Save
+        </Button>
+      </div>
     </>
   )
 }
@@ -190,36 +188,44 @@ function Annotation() {
                 Header: 'Sentences',
                 columns: [
                     {
-                    Header: 'Word',
-                    accessor: 'word',
+                      Header: 'Word',
+                      accessor: 'word',
+                      width: "30%",
                     },
                     {
-                    Header: 'Start Offset',
-                    accessor: 'startOffset',
+                      Header: 'Start Offset',
+                      accessor: 'startOffset',
+                      width: "5%",
                     },
                     {
-                    Header: 'End Offset',
-                    accessor: 'endOffset'
+                      Header: 'End Offset',
+                      accessor: 'endOffset',
+                      width: "5%",
                     },
                     {
-                    Header: 'Tag',
-                    accessor: 'tag',
+                      Header: 'Tag',
+                      accessor: 'tag',
+                      width: "20%",
                     },
                     {
-                    Header: 'Lemma',
-                    accessor: 'lemma',
+                      Header: 'Lemma',
+                      accessor: 'lemma',
+                      width: "10%",
                     },
                     {
-                    Header: 'Entity',
-                    accessor: 'entity'
+                      Header: 'Entity',
+                      accessor: 'entity',
+                      width: "10%"
                     },
                     {
-                    Header: 'Norm',
-                    accessor: 'norm',
+                      Header: 'Norm',
+                      accessor: 'norm',
+                      width: "10%",
                     },
                     {
-                    Header: 'Chunk',
-                    accessor: 'chunk'
+                      Header: 'Chunk',
+                      accessor: 'chunk',
+                      width: "10%"
                     },
                 ],
             },
@@ -261,20 +267,24 @@ function Annotation() {
     setSkipPageReset(false)
   }, [data])
 
+  //FINISH THIS
+  const [updateAnnotation, { loading: mutationLoading, error: mutationError}] = useMutation(UPDATE_ANNOTATION)
+
   // Let's add a data resetter/randomizer to help
   // illustrate that flow...
   const resetData = () => setData(originalData)
 
   return (
-    <Styles>
+    <TableStyles>
       <button onClick={resetData}>Reset Data</button>
       <Table
         columns={columns}
         data={data}
         updateMyData={updateMyData}
+        saveData={updateAnnotation}
         skipPageReset={skipPageReset}
       />
-    </Styles>
+    </TableStyles>
   )
 }
 
