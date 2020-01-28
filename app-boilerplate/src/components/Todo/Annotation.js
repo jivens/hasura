@@ -8,7 +8,6 @@ import new_sentence_data from './makeAnnotationData'
 import { Button } from 'react-bootstrap'
 import { useMutation } from "@apollo/react-hooks"
 
-
 const UPDATE_ANNOTATION = gql `
 mutation updateAnnotations($anno: jsonb, $id: Int!) {
   update_annotations(
@@ -181,7 +180,12 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
   )
 }
 
-function Annotation() {
+function Annotation(anno) {
+  const sentence = anno.annotations.annotation.tokens
+  const anno_id = anno.annotations.id
+  const anno_type = anno.annotations.annotation_type
+  console.log(anno_id + ' ' + anno_type)
+  console.log(sentence)
     const columns = React.useMemo(
         () => [
             {
@@ -232,8 +236,9 @@ function Annotation() {
         ],
         []
     )
-    
-    const [data,setData] = React.useState(new_sentence_data.tokens)
+  
+  const [data,setData] = React.useState(sentence)
+  //const [data,setData] = React.useState(new_sentence_data.tokens)
   //const [data, setData] = React.useState(() => makeData(20))
   const [originalData] = React.useState(data)
   const [skipPageReset, setSkipPageReset] = React.useState(false)
