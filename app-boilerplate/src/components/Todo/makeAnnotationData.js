@@ -1,14 +1,12 @@
 //const sentence_data = require('./sampleSentences')
 
  const new_sentence_data = {
-     "parent_id": "unique_document_id",
+     "document_id": "unique_document_id",
      "index": 0,
-     "language_id": "Chinese Mandarin spoken by Gus",
      "tokens": [
         {
+            "raw": "Barack",
             "word": "Barack",
-            "startOffset": 0,
-            "endOffset": 6,
             "tag": "NNP",
             "lemma": "Barack",
             "entity": "PERSON",
@@ -16,9 +14,8 @@
             "chunk": "B-IP"
         },
         {
+            "raw": "Hussein",
             "word": "Hussein",
-            "startOffset": 7,
-            "endOffset": 14,
             "tag": "NNP",
             "lemma": "Hussein",
             "entity": "PERSON",
@@ -26,9 +23,8 @@
             "chunk": "B-IP"
         },
         {
+            "raw": "Obama",
             "word": "Obama",
-            "startOffset": 15,
-            "endOffset": 20,
             "tag": "NNP",
             "lemma": "Obama",
             "entity": "PERSON",
@@ -36,7 +32,6 @@
             "chunk": "B-IP"
         }
     ],
-    "raw": "Barack Hussein Obama",
     "graphs": {
         "stanford_basic": {
             "edges": [
