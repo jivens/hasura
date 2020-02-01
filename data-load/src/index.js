@@ -1,12 +1,25 @@
 const jq = require('node-jq')
  
-const filter = '.sentences[].fields[] | select(.name=="word") | .tokens'
+const filterWords = '{ sentences: [.sentences[].fields[] | select(.name=="word") | { words: .tokens }]}'
+const filterTags = '{ sentences: [.sentences[].fields[] | select(.name=="tag") | { tags: .tokens }]}'
 const jsonPath = '/data/corpora/odinson/umbc/docs/delorme.com_shu.pages_0_splitted_1000.json'
-const options = {}
+const options = { output: 'json' }
  
-jq.run(filter, jsonPath, options)
-  .then((output) => {
-    console.log(output)
+jq.run(filterWords, jsonPath, options)
+  .then((s_words) => {
+    //console.log(s_words)
+    jq.run(filterTags, jsonPath, options)
+    .then((s_tags) => {
+        //console.log(s_tags)
+        for(var i = 0; i < s_words.sentences.length; i++) {
+            for (var j = 0; j < s_words.sentences[i].words.length; j++) {
+                console.log(s_words.sentences[i].words[j])
+                console.log(s_tags.sentences[i].tags[j])
+                j++
+            }
+            i++
+        }
+    })
   })
   .catch((err) => {
     console.error(err)
