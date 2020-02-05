@@ -218,7 +218,7 @@ const addTaskAndDatums = () => {
                                     }
                                     console.log("File processed: " + s_id)
                                     console.log("Number of sentences: " + i)
-                                    console.log(Object.keys(counts.entities).sort().reduce((a, c) => (a[c] = counts.entities[c], a), {}));
+                                    console.log(JSON.stringify(Object.keys(counts.entities).sort().reduce((a, c) => (a[c] = counts.entities[c], a), {})));
                                     console.log(Object.keys(counts.tags).sort().reduce((a, c) => (a[c] = counts.tags[c], a), {}));
                                     console.log(Object.keys(counts.chunks).sort().reduce((a, c) => (a[c] = counts.chunks[c], a), {}));
                                     console.log(Object.keys(counts.labels).sort().reduce((a, c) => (a[c] = counts.labels[c], a), {}));
