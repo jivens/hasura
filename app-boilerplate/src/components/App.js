@@ -14,6 +14,7 @@ import { useAuth0 } from "./Auth/react-auth0-spa";
 
 
 const createApolloClient = (authToken) => {
+  console.log(authToken)
   return new ApolloClient({
     link: new HttpLink({
       uri: 'https://annotaurus-lex-backend.herokuapp.com/v1/graphql',

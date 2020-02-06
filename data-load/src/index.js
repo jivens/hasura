@@ -65,14 +65,7 @@ mutation insertDatum($task_id: Int!, $datum: jsonb!) {
 
 const addTaskAndDatums = () => {
 
-    // Let's add the task here first
-    // Note that I am not waiting for it to finish or to look for errors
-    // So this better work
-    //const [addTask, { data: taskData, loading: taskLoading, error: taskError}] = useMutation(ADD_TASK);
-    // Run it
-    //addTask({variables: {
-    //    task_description: "Annotate the sentences of delorme.com_shu.pages_0_splitted_1000.json"
-    //}})
+
 
     // Create a mutation to add the datums we want
     //const [addDatum, { loading: datumLoading, error: datumError}] = useMutation(ADD_DATUM);
@@ -96,6 +89,7 @@ const addTaskAndDatums = () => {
                             .then((s_entities) => {
                                 jq.run(filterChunks, jsonPath, options)
                                 .then((s_chunks) => {
+                                    console.log("const sentences = [")
                                     for(var i = 0; i < s_words.sentences.length; i++) {
                                         //o += "=== sentence #", i+1, " ======")
                                         t=0
@@ -212,10 +206,11 @@ const addTaskAndDatums = () => {
                                                 console.log("\"task_id\": 3,")
                                             }
                                             console.log("\"datum\": " + o)
-                                            console.log("}\n")
+                                            console.log("},\n")
                                         }
                                         //o += "=============================")
                                     }
+                                    console.log("]")
                                     console.log("File processed: " + s_id)
                                     console.log("Number of sentences: " + i)
                                     console.log(JSON.stringify(Object.keys(counts.entities).sort().reduce((a, c) => (a[c] = counts.entities[c], a), {})));
