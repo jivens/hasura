@@ -10,15 +10,6 @@ import './App.css';
 
 function App() {
 
-  // return (
-  //   <div className="app">
-  //     <p>Press the button to add tasks and datums</p>
-  //     <button onClick={() => addTaskAndDatums()}>
-  //       Add Tasks and Datums
-  //     </button>
-  //   </div>
-  // )
-
   const createApolloClient = (authToken) => {
     console.log(authToken)
     return new ApolloClient({
