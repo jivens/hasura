@@ -9,6 +9,7 @@ import {useQuery} from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { useAuth0 } from "../Auth/react-auth0-spa";
 import TaskBtn from "./TaskBtn"
+import {GET_ANNOTATIONS_BY_ANNOTATOR_TASK_LATEST_VERSION} from "../../queries/queries"
 
 const IS_ADMIN = gql`
 query isAdmin($auth_id: String!) {
@@ -40,13 +41,17 @@ query getAnnotationsByTask($auth_id:String!, $task_id:Int!) {
  }
 `
 
+
+
+
 const TodoPublicWrapper = () => {
   const { loading, error, user} = useAuth0();
   const isAdmin = useQuery(IS_ADMIN, {variables: {auth_id: user.sub}});
   // TODO: This currently loads task 1 arbitrarily, make this the result of a click
   // TODO: This currently passes the first annotation into the annotations, fix this
   //       to make it the result of picking a specific annotation
-  const taskAnnotations = useQuery(GET_ANNOTATIONS_BY_TASK, {variables: {task_id: 1, auth_id: user.sub}})
+  //const taskAnnotations = useQuery(GET_ANNOTATIONS_BY_TASK, {variables: {task_id: 1, auth_id: user.sub}})
+  const taskAnnotations = useQuery(GET_ANNOTATIONS_BY_ANNOTATOR_TASK_LATEST_VERSION, {variables: {task_id: 1, auth_id: user.sub}})
   const taskHandler = () => {}
   console.log(taskAnnotations)
   if (loading) return <div>Loading</div>;
@@ -62,7 +67,7 @@ const TodoPublicWrapper = () => {
       {isAdmin.data.users[0].is_admin ? <TaskBtn taskHandler={taskHandler} /> : null}
       <TodoInput isPublic />
       <TodoPublicList />
-      <Annotation annotations={taskAnnotations.data.tasks[0].annotations[0]}/>
+      <Annotation annotations={taskAnnotations.data.annotations[0]}/>
       <Profile />
 
     </div>

@@ -15,6 +15,18 @@ const TableStyles = styled.div`
 
    table {
     width: 100%;
+    thead {
+      display: block;
+      width: 100%;
+    }
+    tbody {
+      display: block;
+      width: 100%;
+      box-sizing:border-box;
+      box-shadow:0 2px 15px 0 rgba(0,0,0,0.15);
+      overflow: auto;
+      padding: 1rem;
+    }
     tr {
       :last-child {
         td {
@@ -34,10 +46,7 @@ const TableStyles = styled.div`
       }
     }
   }
-  .columnToggle {
-    background: #fafafa;
-    border: 1px solid #ddd;
-  }
+
   ul {
       list-style: none;
       display: flex;

@@ -9,18 +9,24 @@ import { Button } from 'react-bootstrap'
 import { useMutation } from "@apollo/react-hooks"
 
 const UPDATE_ANNOTATION = gql `
-mutation updateAnnotations($anno: jsonb, $id: Int!) {
+mutation updateAnnotations($datum: jsonb, $datum_id: Int!, $auth_id: String!, $version:Int!) {
   update_annotations(
     where: {
-    	id: {_eq: $id}
+        _and: [
+          {annotator_id: {_eq: $auth_id}},
+          {datum_id: {_eq: $datum_id}},
+          {version: {_eq: $version}}
+        ]
     },
     _set: {
   	  completed: "unconfirmed", 
-    	annotation: $anno
+    	annotation: $datum
     }
   ) {
     returning {
-      id
+      datum_id
+      annotator_id
+      version
     }
   }
 }
@@ -58,8 +64,23 @@ const defaultColumn = {
   Cell: EditableCell,
 }
 
+// Use the show property for hidden columns
+const IndeterminateCheckbox = React.forwardRef(
+  ({ indeterminate, ...rest }, ref) => {
+    const defaultRef = React.useRef()
+    const resolvedRef = ref || defaultRef
+
+    React.useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate
+    }, [resolvedRef, indeterminate])
+
+    return <input type="checkbox" ref={resolvedRef} {...rest} />
+  }
+)
+
+
 // Be sure to pass our updateMyData and the skipPageReset option
-function Table({ columns, data, updateMyData, skipPageReset }) {
+function Table({ columns, data, updateMyData, skipPageReset, saveData }) {
   // For this example, we're using pagination to illustrate how to stop
   // the current page from resetting when our data changes
   // Otherwise, nothing is different here.
@@ -68,6 +89,9 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
     getTableBodyProps,
     headerGroups,
     prepareRow,
+    flatColumns,
+    getToggleHideAllColumnsProps,
+    setHiddenColumns,
     page,
     canPreviousPage,
     canNextPage,
@@ -83,6 +107,7 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
       columns,
       data,
       defaultColumn,
+      hiddenColumns: columns.filter(column => !column.show).map(column => column.id),
       // use the skipPageReset option to disable page resetting temporarily
       autoResetPage: !skipPageReset,
       // updateMyData isn't part of the API, but
@@ -91,13 +116,33 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
       // That way we can call this function from our
       // cell renderer!
       updateMyData,
+      saveData
     },
     usePagination
   )
-
+  // Handle Hidden Columns
+  React.useEffect(() => {
+    const hiddenColumns = flatColumns.filter((column: any) => !column.show).map((column: any)=> column.id);
+    setHiddenColumns(hiddenColumns); 
+  }, []);  
   // Render the UI for your table
   return (
     <>
+      <div>
+        <div className="columnToggle">
+          <IndeterminateCheckbox {...getToggleHideAllColumnsProps()} /> Toggle
+          All
+        </div>
+        {flatColumns.map(column => (
+          <div key={column.id}>
+            <label>
+              <input type="checkbox" {...column.getToggleHiddenProps()} />{' '}
+              {column.id}
+            </label>
+          </div>
+        ))}
+        <br />
+      </div>
     <div className="tableWrap">
       <table {...getTableProps()}>
         <thead>
@@ -170,7 +215,12 @@ function Table({ columns, data, updateMyData, skipPageReset }) {
       <div className="saveAnnotation">
         <Button
           onClick={() => {
-            //updateSentenceData()
+            saveData({variables: {
+              version: 1,
+              datum_id: 18,
+              auth_id: "auth0|5e139e8e9e24280eb4842c16",
+              datum: data
+            }})
           }}
         >
           Save
@@ -195,41 +245,49 @@ function Annotation(anno) {
                       Header: 'Word',
                       accessor: 'word',
                       width: "30%",
+                      show:true,
                     },
                     {
                       Header: 'Start Offset',
                       accessor: 'startOffset',
                       width: "5%",
+                      show: false,
                     },
                     {
                       Header: 'End Offset',
                       accessor: 'endOffset',
                       width: "5%",
+                      show: false,
                     },
                     {
                       Header: 'Tag',
                       accessor: 'tag',
                       width: "20%",
+                      show: true,
                     },
                     {
                       Header: 'Lemma',
                       accessor: 'lemma',
                       width: "10%",
+                      show: true,
                     },
                     {
                       Header: 'Entity',
                       accessor: 'entity',
-                      width: "10%"
+                      width: "10%",
+                      show:true,
                     },
                     {
                       Header: 'Norm',
                       accessor: 'norm',
                       width: "10%",
+                      show: false
                     },
                     {
                       Header: 'Chunk',
                       accessor: 'chunk',
-                      width: "10%"
+                      width: "10%",
+                      show: true
                     },
                 ],
             },
