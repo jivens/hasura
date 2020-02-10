@@ -80,7 +80,7 @@ const IndeterminateCheckbox = React.forwardRef(
 
 
 // Be sure to pass our updateMyData and the skipPageReset option
-function Table({ columns, data, updateMyData, skipPageReset, saveData }) {
+function Table({ columns, data, updateMyData, otherData, skipPageReset, saveData }) {
   // For this example, we're using pagination to illustrate how to stop
   // the current page from resetting when our data changes
   // Otherwise, nothing is different here.
@@ -215,11 +215,17 @@ function Table({ columns, data, updateMyData, skipPageReset, saveData }) {
       <div className="saveAnnotation">
         <Button
           onClick={() => {
+            const new_datum = {
+              document_id: otherData.document_id,
+              index: otherData.index,
+              tokens: data,
+              graphs: otherData.graphs
+            }
             saveData({variables: {
-              version: 1,
-              datum_id: 18,
-              auth_id: "auth0|5e139e8e9e24280eb4842c16",
-              datum: data
+              version: otherData.version,
+              datum_id: otherData.datum_id,
+              auth_id: otherData.auth_id,
+              datum: new_datum
             }})
           }}
         >
@@ -232,9 +238,25 @@ function Table({ columns, data, updateMyData, skipPageReset, saveData }) {
 
 function Annotation(anno) {
   const sentence = anno.annotations.annotation.tokens
-  const anno_id = anno.annotations.id
+  const datum_id = anno.annotations.datum_id
+  const auth_id = anno.annotations.annotator_id
   const anno_type = anno.annotations.annotation_type
-  console.log(anno_id + ' ' + anno_type)
+  const version = anno.annotations.version
+  const document_id = anno.annotations.annotation.document_id
+  const index = anno.annotations.annotation.index
+  const graphs = anno.annotations.annotation.graphs
+
+  const otherData = {
+    datum_id: datum_id,
+    auth_id: auth_id,
+    anno_type: anno_type,
+    version: version,
+    document_id: document_id,
+    index: index,
+    graphs: graphs
+  }
+
+  console.log(datum_id + ' ' + ' ' + auth_id + ' ' + version + ' ' + anno_type + ' ' + document_id + '[' + index + ']')
   console.log(sentence)
     const columns = React.useMemo(
         () => [
@@ -345,6 +367,7 @@ function Annotation(anno) {
         data={data}
         updateMyData={updateMyData}
         saveData={updateAnnotation}
+        otherData={otherData}
         skipPageReset={skipPageReset}
       />
     </TableStyles>

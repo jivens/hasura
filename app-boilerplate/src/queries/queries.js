@@ -61,6 +61,8 @@ const GET_ANNOTATIONS_BY_ANNOTATOR_TASK_LATEST_VERSION = gql`
                 })  {
         task_id
         annotation_type
+        annotator_id
+        datum_id
         completed
         version
         user {
