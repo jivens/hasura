@@ -68,7 +68,6 @@ const TodoPublicWrapper = () => {
 
       {isAdmin.data.users[0].is_admin ? <TaskBtn taskHandler={taskHandler} /> : null}
       <TodoInput isPublic />
-      <TodoPublicList />
       <TabbedArea>
         <TabPane display="sentences">
           <Annotation annotations={taskAnnotations.data.annotations[0]}/>
@@ -77,7 +76,6 @@ const TodoPublicWrapper = () => {
           <Graph annotations={taskAnnotations.data.annotations[0]}/>
         </TabPane>
       </TabbedArea>
-      <Profile />
 
     </div>
   );

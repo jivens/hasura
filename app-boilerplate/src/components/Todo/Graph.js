@@ -215,10 +215,16 @@ function Table({ columns, data, updateMyData, otherData, skipPageReset, saveData
       <div className="saveAnnotation">
         <Button
           onClick={() => {
+            const new_graphs = {
+              "odinson" : {
+                "edges": data,
+                "roots": otherData.roots
+              }
+            }
             const new_datum = {
               document_id: otherData.document_id,
               index: otherData.index,
-              graphs: data,
+              graphs: new_graphs,
               tokens: otherData.tokens
             }
             saveData({variables: {
@@ -238,6 +244,7 @@ function Table({ columns, data, updateMyData, otherData, skipPageReset, saveData
 
 function Graph(anno) {
   const graph = anno.annotations.annotation.graphs["odinson"].edges
+  const roots = anno.annotations.annotation.graphs["odinson"].roots
   const datum_id = anno.annotations.datum_id
   const auth_id = anno.annotations.annotator_id
   const anno_type = anno.annotations.annotation_type
@@ -253,7 +260,8 @@ function Graph(anno) {
     version: version,
     document_id: document_id,
     index: index,
-    tokens: tokens
+    tokens: tokens,
+    roots: roots
   }
 
   console.log(datum_id + ' ' + ' ' + auth_id + ' ' + version + ' ' + anno_type + ' ' + document_id + '[' + index + ']')
