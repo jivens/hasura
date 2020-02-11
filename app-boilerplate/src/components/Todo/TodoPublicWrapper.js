@@ -3,12 +3,14 @@ import React from "react";
 import TodoInput from "./TodoInput";
 import TodoPublicList from "./TodoPublicList";
 import Annotation from "./Annotation";
+import Graph from "./Graph"
 import Profile from "../Profile"
 
 import {useQuery} from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { useAuth0 } from "../Auth/react-auth0-spa";
 import TaskBtn from "./TaskBtn"
+import { TabPane, TabbedArea } from '../Tabs/Tabs'
 import {GET_ANNOTATIONS_BY_ANNOTATOR_TASK_LATEST_VERSION} from "../../queries/queries"
 
 const IS_ADMIN = gql`
@@ -67,7 +69,14 @@ const TodoPublicWrapper = () => {
       {isAdmin.data.users[0].is_admin ? <TaskBtn taskHandler={taskHandler} /> : null}
       <TodoInput isPublic />
       <TodoPublicList />
-      <Annotation annotations={taskAnnotations.data.annotations[0]}/>
+      <TabbedArea>
+        <TabPane display="sentences">
+          <Annotation annotations={taskAnnotations.data.annotations[0]}/>
+        </TabPane>
+        <TabPane display="graphs">
+          <Graph annotations={taskAnnotations.data.annotations[0]}/>
+        </TabPane>
+      </TabbedArea>
       <Profile />
 
     </div>
