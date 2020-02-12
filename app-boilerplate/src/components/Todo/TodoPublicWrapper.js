@@ -6,6 +6,9 @@ import Annotation from "./Annotation";
 import Graph from "./Graph"
 import Profile from "../Profile"
 
+import TAG from "text-annotation-graphs";
+import "text-annotation-graphs/dist/tag/css/tag.css";
+
 import {useQuery} from '@apollo/react-hooks';
 import gql from 'graphql-tag';
 import { useAuth0 } from "../Auth/react-auth0-spa";
