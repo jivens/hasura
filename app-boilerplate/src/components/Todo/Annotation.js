@@ -256,6 +256,7 @@ function Annotation(anno) {
     graphs: graphs
   }
 
+  console.log("Annotation", anno)
   console.log(datum_id + ' ' + ' ' + auth_id + ' ' + version + ' ' + anno_type + ' ' + document_id + '[' + index + ']')
   console.log(sentence)
     const columns = React.useMemo(

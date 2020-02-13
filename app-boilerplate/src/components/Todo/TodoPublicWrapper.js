@@ -94,7 +94,7 @@ const TodoPublicWrapper = () => {
   //     {isAdmin.data.users[0].is_admin ? <TaskBtn taskHandler={taskHandler} /> : null}
   return (
     <div className="todoWrapper">
-      <div className="sectionHeader">Sentence Annotation</div>
+      <div className="sectionHeader">Sentence Annotation Tasks</div>
       <Dropdown 
         options={taskOptions} 
         selectedOption={selectedTask} 

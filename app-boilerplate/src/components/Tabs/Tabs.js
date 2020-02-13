@@ -16,7 +16,7 @@ var TabbedArea = createReactClass({
       var tabNodes = _.map(this.props.children, function (child, index) {
         var className = classSet({'active': self.state.activeIndex === index});
         return (
-          <li onClick={self._handleClick.bind(null, index)}>
+          <li onClick={self._handleClick.bind(null, index)} key={'Tab' + index}>
             <a className={className} href="#">{child.props.display}</a>
           </li>
         );
@@ -25,7 +25,7 @@ var TabbedArea = createReactClass({
       var contentNodes = _.map(this.props.children, function (child, index) {
         if(self.state.activeIndex === index) {
           return (
-            <div className="TabPane">
+            <div className="TabPane" key={'TabPane' + index}>
               {child.props.children}
             </div>
           );

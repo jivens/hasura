@@ -1,5 +1,17 @@
 import gql from 'graphql-tag'
 
+const ANNOTATION_BY_USER_HIGHEST_VERSION = gql`
+query AnnotationsByUserHighestVersion($auth_id: String!, $datum_id: Int!) {
+    annotations(where: {annotator_id: {_eq: $auth_id}, datum_id: {_eq: $datum_id}}, order_by: {version: desc}, limit: 1) {
+      datum_id
+      annotation
+      version
+      annotator_id
+      annotation_type
+    }
+  }
+`
+
 // Note: retrieves the highest version
 // {
 //     "data": {
@@ -12,12 +24,12 @@ import gql from 'graphql-tag'
 //     }
 //   }
 const DATUM_WITH_ANNOTATIONS = gql`
-    query DatumWithAnnotationsByUserHighestVersion($auth_id: String!) {
-        annotations(where: {annotator_id: {_eq: $auth_id}, datum_id: {_in: [18, 19, 20]}}, order_by: {version: desc}, limit: 1) {
-        datum_id
-        version
-        }
-    }
+query DatumWithAnnotationsByUserHighestVersion($auth_id: String!, $data_set: [Int!]!) {
+  annotations(where: {annotator_id: {_eq: $auth_id}, datum_id: {_in: $data_set}}, order_by: {version: desc}, limit: 1) {
+    datum_id
+    version
+  }
+}
 `;
 
 // {
@@ -265,6 +277,7 @@ const GET_ANNOTATIONS_BY_ANNOTATOR_TASK_LATEST_VERSION = gql`
 `;
 
 export {
+    ANNOTATION_BY_USER_HIGHEST_VERSION,
     DATUM_WITH_ANNOTATIONS,
     TASKS_AND_USERS,
     TASKS_AND_USERS_BY_USER_AND_TASK,

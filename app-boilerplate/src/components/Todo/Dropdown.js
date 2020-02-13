@@ -24,11 +24,14 @@ const Dropdown = ({
     // present but the available selections no longer contain it.
     // In that case we reset the selected option to the first element
     // in the array
-    selectedOption = options[0].value
-    setSelectedOption(selectedOption)
+    if(options.length > 0) {
+      selectedOption = options[0].value
+      setSelectedOption(selectedOption)
+    }
   }
 
-  return (
+  if (options.length > 0) {
+    return (
       <select
         value={selectedOption}
         onChange={e => setSelectedOption(e.target.value)}>
@@ -36,7 +39,9 @@ const Dropdown = ({
           <option value={o.value}>{o.label}</option>
         ))}
       </select>
-  );
+    );
+  }
+  return (<div>None</div>)
 };
 
 export default Dropdown
