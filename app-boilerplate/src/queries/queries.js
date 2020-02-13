@@ -121,6 +121,25 @@ query TasksAndUsers($auth_id: String!) {
   }
 `  
 
+const TASKS_AND_USERS_BY_USER_AND_TASK = gql`
+    query TasksAndUsersByUserAndTask($auth_id: String!, $task_id: Int!) {
+        task_user(where: {user_id: {_eq: $auth_id}, task_id: {_eq: $task_id}}) {
+        task_id
+        user_id
+        user {
+            name
+        }
+        task {
+            task_description
+            data {
+            id
+            annotation_type
+            }
+        }
+        }
+    }
+`
+
 
 // {
 //     "data": {
@@ -165,6 +184,7 @@ const DATA_BY_TASK_AND_USER = gql`
                 data {
                     id
                     annotation_type
+                    original_annotation
                 }
             }
         }
@@ -247,6 +267,7 @@ const GET_ANNOTATIONS_BY_ANNOTATOR_TASK_LATEST_VERSION = gql`
 export {
     DATUM_WITH_ANNOTATIONS,
     TASKS_AND_USERS,
+    TASKS_AND_USERS_BY_USER_AND_TASK,
     DATA_BY_TASK_AND_USER,
     GET_DATUMS_BY_TASK ,
     INSERT_ANNOTATIONS_FROM_DATUM,

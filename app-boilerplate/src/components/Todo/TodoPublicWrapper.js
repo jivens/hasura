@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from 'react';
 
 import TodoInput from "./TodoInput";
 import TodoPublicList from "./TodoPublicList";
@@ -14,7 +14,13 @@ import gql from 'graphql-tag';
 import { useAuth0 } from "../Auth/react-auth0-spa";
 import TaskBtn from "./TaskBtn"
 import { TabPane, TabbedArea } from '../Tabs/Tabs'
-import {GET_ANNOTATIONS_BY_ANNOTATOR_TASK_LATEST_VERSION} from "../../queries/queries"
+import Dropdown from "./Dropdown"
+import DatumHolder from "./DatumHolder"
+import {
+  GET_ANNOTATIONS_BY_ANNOTATOR_TASK_LATEST_VERSION, 
+  TASKS_AND_USERS, 
+  DATA_BY_TASK_AND_USER
+} from "../../queries/queries"
 
 const IS_ADMIN = gql`
 query isAdmin($auth_id: String!) {
@@ -56,7 +62,12 @@ const TodoPublicWrapper = () => {
   // TODO: This currently passes the first annotation into the annotations, fix this
   //       to make it the result of picking a specific annotation
   //const taskAnnotations = useQuery(GET_ANNOTATIONS_BY_TASK, {variables: {task_id: 1, auth_id: user.sub}})
+
+  const [selectedTask, setSelectedTask] = useState();
+
   const taskAnnotations = useQuery(GET_ANNOTATIONS_BY_ANNOTATOR_TASK_LATEST_VERSION, {variables: {task_id: 1, auth_id: user.sub}})
+  const tasksForUser = useQuery(TASKS_AND_USERS, {variables: {auth_id: user.sub}})
+
   const taskHandler = () => {}
   console.log(taskAnnotations)
   if (loading) return <div>Loading</div>;
@@ -65,21 +76,31 @@ const TodoPublicWrapper = () => {
   if (isAdmin.error) return <div>Error reading user table</div>;
   if (taskAnnotations.loading) return <div>Loading</div>;
   if (taskAnnotations.error) return <div>Error reading annotations</div>;
+  if (tasksForUser.loading) return <div>Loading</div>
+  if (tasksForUser.error) return <div>Error loading tasks for a user</div>
+  console.log(selectedTask)
+  console.log(tasksForUser)
+  let taskOptions = []
+  const taskopts = tasksForUser.data.task_user
+  for (let i=0; i < taskopts.length; i++) {
+    taskOptions.push({
+      "label": taskopts[i].task.task_description,
+      "value": taskopts[i].task_id
+    });
+  }
+  console.log(taskOptions)
+  //console.log(tasksForUser.data.task_user[0].task_id, tasksForUser.data.task_user[0].task.task_description)
+  //console.log(tasksForUser.data.task_user[1].task_id, tasksForUser.data.task_user[1].task.task_description)
+  //     {isAdmin.data.users[0].is_admin ? <TaskBtn taskHandler={taskHandler} /> : null}
   return (
     <div className="todoWrapper">
-      <div className="sectionHeader">Public feed (realtime)</div>
-
-      {isAdmin.data.users[0].is_admin ? <TaskBtn taskHandler={taskHandler} /> : null}
-      <TodoInput isPublic />
-      <TabbedArea>
-        <TabPane display="sentences">
-          <Annotation annotations={taskAnnotations.data.annotations[0]}/>
-        </TabPane>
-        <TabPane display="graphs">
-          <Graph annotations={taskAnnotations.data.annotations[0]}/>
-        </TabPane>
-      </TabbedArea>
-
+      <div className="sectionHeader">Sentence Annotation</div>
+      <Dropdown 
+        options={taskOptions} 
+        selectedOption={selectedTask} 
+        setSelectedOption={setSelectedTask}
+      /> 
+      <DatumHolder auth_id={user.sub} task_id={selectedTask}/>
     </div>
   );
 };
